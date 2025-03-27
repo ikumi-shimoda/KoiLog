@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -12,6 +13,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class NameRequest(BaseModel):
+    name: str
+
 @app.get("/")
 async def root():
     return {"message": "Welcome to KoiLog API"} 
+
+@app.post("/api/")
+async def process_data(request: NameRequest):
+    print(request)
+    return {"name": request.name}
